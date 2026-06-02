@@ -1,23 +1,30 @@
 #!/bin/sh
 set -e
 
-# Wait for DB to become available, then run migrations and collectstatic.
-# Retry a few times to handle transient DB start timing on managed Postgres.
-TRIES=0
-MAX_TRIES=10
-SLEEP_SECONDS=3
+echo "========================================="
+echo "Starting TechSphere deployment..."
+echo "========================================="
 
-until python -c "import sys, django; print('ok')" 2>/dev/null || [ "$TRIES" -ge "$MAX_TRIES" ]; do
-	TRIES=$((TRIES+1))
-	echo "Waiting for Django environment... (attempt $TRIES/$MAX_TRIES)"
-	sleep $SLEEP_SECONDS
-done
+echo "Checking Django..."
+python -c "import django; print('Django version:', django.get_version())"
 
-# Run migrations and collect static files
+echo "========================================="
+echo "Showing blog migrations..."
+echo "========================================="
+python manage.py showmigrations blog
+
+echo "========================================="
 echo "Running migrations..."
-python manage.py migrate --noinput || echo "migrate failed (will retry on next start)"
-echo "Collecting static files..."
-python manage.py collectstatic --noinput || echo "collectstatic failed"
+echo "========================================="
+python manage.py migrate --noinput
 
-# Exec the container CMD
+echo "========================================="
+echo "Collecting static files..."
+echo "========================================="
+python manage.py collectstatic --noinput
+
+echo "========================================="
+echo "Starting Gunicorn..."
+echo "========================================="
+
 exec "$@"
