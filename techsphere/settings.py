@@ -73,26 +73,40 @@ TEMPLATES = [
 WSGI_APPLICATION = 'techsphere.wsgi.application'
 
 def get_database_config():
-    database_url = os.getenv('DATABASE_URL')
+    database_url = (
+        os.getenv('DATABASE_URL')
+        or os.getenv('RENDER_DATABASE_URL')
+        or os.getenv('POSTGRES_URL')
+    )
     if database_url:
         parsed_db_url = urlparse(database_url)
         return {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': parsed_db_url.path[1:],
+            'NAME': parsed_db_url.path.lstrip('/'),
             'USER': parsed_db_url.username,
             'PASSWORD': parsed_db_url.password,
             'HOST': parsed_db_url.hostname,
             'PORT': parsed_db_url.port or '5432',
         }
 
-    if os.getenv('PGHOST'):
+    if os.getenv('PGHOST') or os.getenv('PGDATABASE') or os.getenv('PGUSER') or os.getenv('PGPASSWORD') or os.getenv('PGPORT'):
         return {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': os.getenv('PGDATABASE', os.getenv('POSTGRES_DB', 'techsphere')),
             'USER': os.getenv('PGUSER', os.getenv('POSTGRES_USER', 'techsphere_user')),
             'PASSWORD': os.getenv('PGPASSWORD', os.getenv('POSTGRES_PASSWORD', 'password')),
-            'HOST': os.getenv('PGHOST'),
+            'HOST': os.getenv('PGHOST', os.getenv('POSTGRES_HOST')),
             'PORT': os.getenv('PGPORT', os.getenv('POSTGRES_PORT', '5432')),
+        }
+
+    if os.getenv('POSTGRES_HOST'):
+        return {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB', 'techsphere'),
+            'USER': os.getenv('POSTGRES_USER', 'techsphere_user'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
+            'HOST': os.getenv('POSTGRES_HOST'),
+            'PORT': os.getenv('POSTGRES_PORT', '5432'),
         }
 
     return {
@@ -100,7 +114,7 @@ def get_database_config():
         'NAME': os.getenv('POSTGRES_DB', 'techsphere'),
         'USER': os.getenv('POSTGRES_USER', 'techsphere_user'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
-        'HOST': os.getenv('POSTGRES_HOST', 'db'),
+        'HOST': 'db',
         'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 

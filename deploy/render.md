@@ -32,7 +32,9 @@ In Render service settings, add these env vars:
 - `DJANGO_SECRET_KEY` = a secure random string
 - `DJANGO_DEBUG` = `False`
 - `DJANGO_ALLOWED_HOSTS` = your-render-url.onrender.com
-- `DATABASE_URL` = (value from Render Postgres service or auto-injected by the managed database connection)
+- `DATABASE_URL` = `postgresql://<username>:<password>@<host>:<port>/<database>`
+  - Example: `postgresql://techsphere_3xbt_user:IWZaCF0v1wYRzTHKvORicjB20OuBv4Q7@dpg-d8faqrv7f7vs73cr4ktg-a:5432/techsphere_3xbt`
+  - If the URL has no explicit port, `5432` is used by default.
 - `REDIS_URL` = `redis://:<password>@<host>:<port>`
 
 ## 5. Run migrations and collect static files
