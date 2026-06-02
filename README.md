@@ -114,11 +114,12 @@ See `deploy/render.md` for full Render deployment instructions.
 - `DJANGO_SECRET_KEY`
 - `DJANGO_DEBUG`
 - `DJANGO_ALLOWED_HOSTS`
-- `POSTGRES_DB`
-- `POSTGRES_USER`
-- `POSTGRES_PASSWORD`
-- `POSTGRES_HOST`
-- `POSTGRES_PORT`
+- `DATABASE_URL`
+- `POSTGRES_DB` (local fallback)
+- `POSTGRES_USER` (local fallback)
+- `POSTGRES_PASSWORD` (local fallback)
+- `POSTGRES_HOST` (local fallback)
+- `POSTGRES_PORT` (local fallback)
 - `REDIS_URL`
 
 ## Contributing
