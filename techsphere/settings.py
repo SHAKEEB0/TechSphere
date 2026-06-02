@@ -2,6 +2,7 @@ import os
 import sys
 from pathlib import Path
 from urllib.parse import urlparse
+from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -109,14 +110,19 @@ def get_database_config():
             'PORT': os.getenv('POSTGRES_PORT', '5432'),
         }
 
-    return {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('POSTGRES_DB', 'techsphere'),
-        'USER': os.getenv('POSTGRES_USER', 'techsphere_user'),
-        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
-        'HOST': 'db',
-        'PORT': os.getenv('POSTGRES_PORT', '5432'),
-    }
+    if DEBUG:
+        return {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.getenv('POSTGRES_DB', 'techsphere'),
+            'USER': os.getenv('POSTGRES_USER', 'techsphere_user'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
+            'HOST': 'db',
+            'PORT': os.getenv('POSTGRES_PORT', '5432'),
+        }
+
+    raise ImproperlyConfigured(
+        'Database configuration is missing. Set DATABASE_URL, RENDER_DATABASE_URL, POSTGRES_URL, or POSTGRES_HOST in Render service environment variables.'
+    )
 
 DATABASES = {'default': get_database_config()}
 
