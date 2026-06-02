@@ -5,7 +5,7 @@ services:
     branch: main
     plan: free
     dockerfilePath: Dockerfile
-    startCommand: gunicorn techsphere.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    startCommand: python manage.py migrate --noinput && python manage.py collectstatic --noinput && gunicorn techsphere.wsgi:application --bind 0.0.0.0:8000 --workers 3
     envVars:
       - key: DJANGO_SECRET_KEY
         sync: false
