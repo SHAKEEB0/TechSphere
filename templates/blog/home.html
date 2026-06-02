@@ -12,7 +12,14 @@
                 {% for post in latest %}
                 <article class="col border rounded p-4 shadow-sm bg-white">
                     <a class="text-decoration-none" href="{{ post.get_absolute_url }}"><h2>{{ post.title }}</h2></a>
-                    <p class="text-muted small">{{ post.category.name if post.category else 'General' }} · {{ post.reading_time }} min read · {{ post.publish_at|date:'M d, Y' }}</p>
+                    <p class="text-muted small">
+                        {% if post.category %}
+                            {{ post.category.name }}
+                        {% else %}
+                            General
+                        {% endif %}
+                        · {{ post.reading_time }} min read · {{ post.publish_at|date:'M d, Y' }}
+                    </p>
                     <p>{{ post.summary|truncatechars:180 }}</p>
                 </article>
                 {% empty %}
