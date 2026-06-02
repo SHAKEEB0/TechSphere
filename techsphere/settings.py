@@ -10,6 +10,9 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'replace-with-secure-secret')
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost 127.0.0.1').split()
+render_hostname = os.getenv('RENDER_EXTERNAL_HOSTNAME')
+if render_hostname:
+    ALLOWED_HOSTS = list(dict.fromkeys(ALLOWED_HOSTS + [render_hostname]))
 
 INSTALLED_APPS = [
     'django.contrib.admin',
