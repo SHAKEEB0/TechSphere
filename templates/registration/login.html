@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Login | TechSphere{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title mb-4">Login</h2>
+                <form method="post">{% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-primary" type="submit">Sign in</button>
+                </form>
+                <p class="mt-3">New to TechSphere? <a href="{% url 'accounts:register' %}">Create an account</a></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

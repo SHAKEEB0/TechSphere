@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Search results for {{ query }} | TechSphere{% endblock %}
+{% block content %}
+<div class="bg-white rounded shadow-sm p-4">
+    <h1 class="h4">Search results</h1>
+    <p class="text-muted">You searched for "{{ query }}".</p>
+    <div class="list-group">
+        {% for post in posts %}
+        <a class="list-group-item list-group-item-action" href="{{ post.get_absolute_url }}">
+            <h5>{{ post.title }}</h5>
+            <p class="mb-0 text-muted">{{ post.summary|truncatechars:140 }}</p>
+        </a>
+        {% empty %}
+        <p>No matching content found.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

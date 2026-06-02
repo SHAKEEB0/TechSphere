@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Edit Profile | TechSphere{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm p-4">
+            <h2>Edit your profile</h2>
+            <form method="post" enctype="multipart/form-data">{% csrf_token %}
+                {{ form.as_p }}
+                <button class="btn btn-primary" type="submit">Save changes</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

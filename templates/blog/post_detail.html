@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% block title %}{{ post.get_meta_title }} | TechSphere{% endblock %}
+{% block content %}
+<article class="bg-white rounded shadow-sm p-4">
+    <div class="mb-3">
+        <a class="text-decoration-none" href="{{ post.category.get_absolute_url }}">{{ post.category.name }}</a>
+        <h1 class="mt-2">{{ post.title }}</h1>
+        <p class="text-muted">By {{ post.author.get_full_name|default:post.author.username }} · {{ post.reading_time }} min read · {{ post.publish_at|date:'M d, Y' }}</p>
+    </div>
+    <div class="mb-4">
+        {{ post.body|linebreaks }}
+    </div>
+    <div class="mt-5">
+        <h4>Related articles</h4>
+        <div class="row g-3">
+            {% for item in related %}
+            <div class="col-12">
+                <a href="{{ item.get_absolute_url }}">{{ item.title }}</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</article>
+<section class="mt-4 bg-white rounded shadow-sm p-4">
+    <h3>Comments</h3>
+    {% for comment in comments %}
+    <div class="border-bottom py-3">
+        <p class="mb-1"><strong>{{ comment.user.username }}</strong> · {{ comment.created_at|date:'M d, Y' }}</p>
+        <p>{{ comment.body }}</p>
+    </div>
+    {% empty %}
+    <p>No comments yet. Be the first to share your thoughts.</p>
+    {% endfor %}
+</section>
+{% endblock %}

@@ -1,0 +1,39 @@
+services:
+  - type: web_service
+    name: TechSphere Web
+    env: docker
+    branch: main
+    plan: free
+    dockerfilePath: Dockerfile
+    startCommand: gunicorn techsphere.wsgi:application --bind 0.0.0.0:8000 --workers 3
+    envVars:
+      - key: DJANGO_SECRET_KEY
+        sync: false
+      - key: DJANGO_DEBUG
+        value: "False"
+      - key: DJANGO_ALLOWED_HOSTS
+        value: "localhost 127.0.0.1"
+      - key: POSTGRES_DB
+        value: techsphere
+      - key: POSTGRES_USER
+        value: techsphere_user
+      - key: POSTGRES_PASSWORD
+        sync: false
+      - key: POSTGRES_HOST
+        value: localhost
+      - key: POSTGRES_PORT
+        value: "5432"
+      - key: REDIS_URL
+        sync: false
+
+databases:
+  - type: postgres
+    name: TechSphere Postgres
+    plan: starter
+    databaseName: techsphere
+    userName: techsphere_user
+
+caches:
+  - type: redis
+    name: TechSphere Redis
+    plan: starter

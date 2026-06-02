@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}TechSphere{% endblock %}</title>
+    <meta name="description" content="TechSphere is a modern technology media platform for articles, tutorials, and premium learning content." />
+    <meta name="keywords" content="technology blog, programming tutorials, AI news, cybersecurity, devops, cloud computing" />
+    <meta property="og:site_name" content="TechSphere" />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="{{ request.build_absolute_uri }}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{% static 'css/site.css' %}" />
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom shadow-sm">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="{% url 'blog:home' %}">TechSphere</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="mainNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="{% url 'blog:home' %}">Home</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'newsletter:subscribe' %}">Newsletter</a></li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:profile' username=user.username %}">Profile</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:logout' %}">Logout</a></li>
+                {% else %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:login' %}">Login</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'accounts:register' %}">Register</a></li>
+                {% endif %}
+            </ul>
+            <form class="d-flex ms-3" method="get" action="{% url 'blog:search' %}">
+                <input class="form-control me-2" type="search" name="q" placeholder="Search TechSphere..." aria-label="Search" />
+                <button class="btn btn-outline-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<main class="container py-4">
+    {% block content %}{% endblock %}
+</main>
+<footer class="bg-dark text-white py-4 mt-5">
+    <div class="container d-flex flex-column flex-md-row justify-content-between align-items-center">
+        <p class="mb-2 mb-md-0">&copy; 2026 TechSphere. Built for modern developers and learners.</p>
+        <div>
+            <a class="text-white me-3" href="#">Privacy</a>
+            <a class="text-white me-3" href="#">Terms</a>
+            <a class="text-white" href="#">Docs</a>
+        </div>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-..." crossorigin="anonymous"></script>
+</body>
+</html>

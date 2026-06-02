@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Subscribe to Newsletter | TechSphere{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm p-4 text-center">
+            <h2>Weekly TechSphere Newsletter</h2>
+            <p>Get the latest programming guides, AI news, and premium deals delivered to your inbox.</p>
+            <form method="post">{% csrf_token %}
+                <div class="mb-3">
+                    <input type="email" name="email" class="form-control" placeholder="Email address" required />
+                </div>
+                <button class="btn btn-primary">Subscribe</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

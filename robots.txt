@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /accounts/password-reset/
+Disallow: /accounts/password-reset-confirm/
+Allow: /
+Sitemap: https://techsphere.dev/sitemap.xml

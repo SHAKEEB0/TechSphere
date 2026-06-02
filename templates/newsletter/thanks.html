@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Thanks for subscribing | TechSphere{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm p-4 text-center">
+            <h2>Subscription confirmed</h2>
+            <p>Thanks for joining the TechSphere newsletter. Watch your inbox for curated tech insights.</p>
+            <a class="btn btn-primary" href="{% url 'blog:home' %}">Back to home</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

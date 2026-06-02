@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Tag: {{ tag.name }} | TechSphere{% endblock %}
+{% block content %}
+<div class="bg-white rounded shadow-sm p-4">
+    <h1 class="h3">Tag: {{ tag.name }}</h1>
+    <div class="row row-cols-1 gy-3">
+        {% for post in posts %}
+        <div class="col border-bottom py-3">
+            <a href="{{ post.get_absolute_url }}"><h4>{{ post.title }}</h4></a>
+            <p class="text-muted">{{ post.summary|truncatechars:160 }}</p>
+        </div>
+        {% empty %}
+        <p>No posts tagged with {{ tag.name }} yet.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
