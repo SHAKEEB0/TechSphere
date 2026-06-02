@@ -72,10 +72,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'techsphere.wsgi.application'
 
-if os.getenv('DATABASE_URL'):
-    parsed_db_url = urlparse(os.getenv('DATABASE_URL'))
-    DATABASES = {
-        'default': {
+def get_database_config():
+    database_url = os.getenv('DATABASE_URL')
+    if database_url:
+        parsed_db_url = urlparse(database_url)
+        return {
             'ENGINE': 'django.db.backends.postgresql',
             'NAME': parsed_db_url.path[1:],
             'USER': parsed_db_url.username,
@@ -83,18 +84,27 @@ if os.getenv('DATABASE_URL'):
             'HOST': parsed_db_url.hostname,
             'PORT': parsed_db_url.port or '5432',
         }
-    }
-else:
-    DATABASES = {
-        'default': {
+
+    if os.getenv('PGHOST'):
+        return {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('POSTGRES_DB', 'techsphere'),
-            'USER': os.getenv('POSTGRES_USER', 'techsphere_user'),
-            'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
-            'HOST': os.getenv('POSTGRES_HOST', 'db'),
-            'PORT': os.getenv('POSTGRES_PORT', '5432'),
+            'NAME': os.getenv('PGDATABASE', os.getenv('POSTGRES_DB', 'techsphere')),
+            'USER': os.getenv('PGUSER', os.getenv('POSTGRES_USER', 'techsphere_user')),
+            'PASSWORD': os.getenv('PGPASSWORD', os.getenv('POSTGRES_PASSWORD', 'password')),
+            'HOST': os.getenv('PGHOST'),
+            'PORT': os.getenv('PGPORT', os.getenv('POSTGRES_PORT', '5432')),
         }
+
+    return {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'techsphere'),
+        'USER': os.getenv('POSTGRES_USER', 'techsphere_user'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'password'),
+        'HOST': os.getenv('POSTGRES_HOST', 'db'),
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
+
+DATABASES = {'default': get_database_config()}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
