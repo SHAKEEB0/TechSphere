@@ -12,6 +12,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN python manage.py collectstatic --noinput
+# Copy and register entrypoint which will run migrations and collectstatic at start
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["gunicorn", "techsphere.wsgi:application", "--bind", "0.0.0.0:8000", "--workers", "3", "--log-level", "info"]
