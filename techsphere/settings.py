@@ -120,6 +120,13 @@ def get_database_config():
             'PORT': os.getenv('POSTGRES_PORT', '5432'),
         }
 
+    # Use in-memory SQLite for build-time operations like collectstatic
+    if 'collectstatic' in sys.argv or 'migrate' in sys.argv:
+        return {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': ':memory:',
+        }
+
     raise ImproperlyConfigured(
         'Database configuration is missing. Set DATABASE_URL, RENDER_DATABASE_URL, POSTGRES_URL, or POSTGRES_HOST in Render service environment variables.'
     )
