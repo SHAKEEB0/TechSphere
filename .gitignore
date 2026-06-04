@@ -3,8 +3,6 @@ __pycache__/
 *.pyo
 *.pyd
 *.sqlite3
-*.env
-.env*
 media/
 staticfiles/
 node_modules/
