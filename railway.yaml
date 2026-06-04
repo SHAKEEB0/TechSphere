@@ -1,0 +1,71 @@
+# TechSphere - Railway.app Deployment Configuration
+# Place this at the root of your repository
+# Railway will automatically detect and use this configuration
+
+services:
+  web:
+    # Use the default Dockerfile
+    dockerfile: Dockerfile
+    
+    # Build context
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # Environment variables will be set in Railway dashboard
+    # Reference .env.example for required variables
+    
+    # Port configuration
+    port: 8000
+    
+    # Start command for production
+    start_command: |
+      python manage.py migrate --noinput && \
+      python manage.py collectstatic --noinput && \
+      gunicorn techsphere.wsgi:application --bind 0.0.0.0:$PORT --workers 4 --worker-class sync --timeout 120 --access-logfile - --error-logfile -
+    
+    # Health check
+    healthChecks:
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      startPeriod: 30s
+    
+    # Resource allocation
+    resources:
+      cpus: 0.5
+      memory: 1Gi
+
+databases:
+  # PostgreSQL (optional - you can use Neon instead)
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: techsphere
+      POSTGRES_USER: techsphere_user
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Redis for Celery and Caching
+  redis:
+    image: redis:7-alpine
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+
+volumes:
+  postgres_data:
+  redis_data:
+
+# Environment variables (add these in Railway dashboard)
+# See .env.example for complete list
+environment:
+  - DJANGO_DEBUG=False
+  - DJANGO_SETTINGS_MODULE=techsphere.settings_production
+  - ENVIRONMENT=production
+  - USE_R2=True
+  - SECURE_SSL_REDIRECT=True
+  - SESSION_COOKIE_SECURE=True
+  - CSRF_COOKIE_SECURE=True
+  - SENTRY_ENABLED=True
